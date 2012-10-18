@@ -2,7 +2,7 @@ import sqlite3
 import time
 import datetime
 import cPickle as pickle
-from priodict import priorityDictionary
+#from priodict import priorityDictionary
 
 
 class Node:
@@ -21,9 +21,9 @@ def makeDic():
    while True:
       try:
          element = pickle.load(f)
-         dic[element[0]] = Node(element[0], element[1])
+         dic[element[0]] = Node(element[0], element[1].split(':'))
          count += 1
-         if count % 5000 == 0: print('loaded ' + str(len(dic)) + ' elements')
+         if count % 1000000 == 0: print('loaded ' + str(len(dic)) + ' elements')
          #dic.update(pickle.load(f))
       except EOFError:
          break
@@ -65,17 +65,20 @@ def aStar(dic, start, end):
    openList.add(start)
    while openList:
       start = sorted(openList, key=lambda inst:dic[inst].distance)[0]
+      print('start: ' + str(start))
       if start == end:
          print('done')
          return pathmaker(start)
       openList.remove(start)
       closedList.add(start)
+      print(dic[start].links)
       for article in dic[start].links:
-         if article not in closedList:
-            dic[article].distance = dic[start].distance + 1
-            if article not in openList:
-               openList.add(article)
-               dic[article].parent = start
+          print('article: ' + str(article))
+          if article not in closedList:
+              dic[article].distance = dic[start].distance + 1
+              if article not in openList:
+                  openList.add(article)
+                  dic[article].parent = start
 
 def pathmaker(start):
    path = {}

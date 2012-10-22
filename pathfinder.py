@@ -2,112 +2,93 @@ import sqlite3
 import time
 import datetime
 import cPickle as pickle
-#from priodict import priorityDictionary
-
 
 class Node:
    
     def __init__(self, title, links):
-        self.title = title   # the title of the article
-        self.links = links   # the titles of all the articles linked to
-        self.parent = None   # the parent article title for path finding
-        self.distance = -1   # the number of articles it takes to get to
+        self.title = title        # the title of the article
+        self.links = links        # the titles of all the articles linked to
+        self.parent = ''          # the parent article title for path finding
+        self.distance = 1000000   # the number of articles it takes to get to
 
 
-def makeDic():
-   f = open('output.txt')
-   dic = {}
-   count = 0
-   while True:
-      try:
-         element = pickle.load(f)
-         dic[element[0]] = Node(element[0], element[1].split(':'))
-         count += 1
-         if count % 1000000 == 0: print('loaded ' + str(len(dic)) + ' elements')
-         #dic.update(pickle.load(f))
-      except EOFError:
-         break
-   print(len(dic))
-   return dic
-
-def main(start, end):
-    #conn = sqlite3.connect('wiki.db')
-    #conn.text_factory = str
-    dic = makeDic()
-    print('imported dictionary')
-    print(len(dic))
-    distances = {}
-    previous = {}
-    Q = priorityDictionary()
-    Q[start] = 0
-
-    for page in Q:
-        distances[page] = Q[page]
-        if page == end:
-            break
-        for link in dic[page]:
-            #print('article: ' + article)
-            length = distances[page] + 1
-            if link in distances:
-                if length < distances[link]:
-                   raise ValueError
-            elif link not in Q or length < Q[link]:
-                Q[link] = length
-                previous[link] = page
-        print(page)
-    return (distances, previous)
+def makeDic(fname):
+    '''
+    Reads in from the file specified, which each line is a list with 2 indexes,
+        title and links
+    fname (String): the file name to pickle from
+    Returns a dictionary with the article titles as the keys and Node classes
+        as the value
+    '''
+    wikiInput = open(fname)
+    dic = {}
+    count = 0
+    startTime = time.clock()
+    while True:
+        try:
+            element = pickle.load(wikiInput) # single article, [0] is title, [1] is links
+            dic[element[0]] = Node(element[0], element[1])
+            count += 1
+            if count % 1000000 == 0:
+                print('loaded ' + format(count, ',d') + ' elements')
+        except EOFError:
+            break # breaks when all articles have been read
+    endTime = time.clock()
+    print('Time to load dictionary: ' + str(datetime.timedelta(seconds=(endTime - startTime))))
+    wikiInput.close()
+    return dic
 
 def aStar(dic, start, end):
-   openList = set()
-   closedList = set()
-   
+    '''
+    Runs the A Star Algorithm on the passed dictionary
+    dic (dictionary): the dictionary containing the classes representing the articles
+    start (Node): the node to start at
+    end (Node): the node to end at
+    Returns True if path found, False if no path was found
+    '''
+    openList = set()   # the articles that can be got to, but have not be look at
+    closedList = set() # the articles that have already be processed
+    count = 0
+    openList.add(start)
+    while openList:
+        start = sorted(openList, key=lambda inst: inst.distance)[0]
+        if start.title == end.title:
+            return True
+        if start.distance == 3: break
+        openList.remove(start)
+        closedList.add(start)
+        for article in start.links.split(':'):
+            if article in dic: # if the article is an actual link
+                if dic[article] not in closedList:
+                    dic[article].distance = start.distance + 1
+                    openList.add(dic[article])
+                    dic[article].parent = start.title
+            else:
+                pass
+    return False
+          
+def pathMaker(dic, start, end):
+    '''
+    Makes the list of articles to go to to get from the start to the finish
+    dic (dictionary): the dictionary of the articles
+    start (String): the start article's name
+    end (String): the end article's name
+    Returns a list of the articles to go to
+    '''
+    path = []
+    while not dic[end].parent == '':
+        path.append(end)
+        end = dic[end].parent
+    path.append(start)
+    path.reverse()
+    return path
 
-   openList.add(start)
-   while openList:
-      start = sorted(openList, key=lambda inst:dic[inst].distance)[0]
-      print('start: ' + str(start))
-      if start == end:
-         print('done')
-         return pathmaker(start)
-      openList.remove(start)
-      closedList.add(start)
-      print(dic[start].links)
-      for article in dic[start].links:
-          print('article: ' + str(article))
-          if article not in closedList:
-              dic[article].distance = dic[start].distance + 1
-              if article not in openList:
-                  openList.add(article)
-                  dic[article].parent = start
-
-def pathmaker(start):
-   path = {}
-   count = 1
-   while not node.parent == None:
-      path[count] = node
-      node = node.parent
-      count += 1
-   return path
-
-            
-'''conn = sqlite3.connect('wiki.db')
-conn.text_factory = str       
-lst = str(conn.execute('SELECT links FROM pages WHERE name = "%s"' % 'New York Philharmonic').fetchone())[2:-4].split(':')
-print(lst)'''
 start = 'Kathrinstadt Airport'
-end = 'Federal Aviation Administration'
-startTime = time.clock()
-print(aStar(makeDic(), start, end))
-'''distances, previous = main(start, end)
-path = []
-while True:
-   path.append(end)
-   if end == start:
-      break
-   end = previous[end]
-endTime = time.clock()
-print('Path:')
-for i in path:
-   print('- ' + i)
-print('Time: ' + str(datetime.timedelta(seconds=(endTime - startTime))))
-print('done')'''
+end = 'United States Department of Defense'
+dic = makeDic('output.txt')
+print(dic[start].links)
+dic[start].distance = 0
+print(aStar(dic, dic[start], dic[end]))
+print('-----------------------------------------')
+print(pathMaker(dic, start, end))
+

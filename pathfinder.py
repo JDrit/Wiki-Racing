@@ -48,23 +48,24 @@ def aStar(dic, start, end):
     '''
     openList = set()   # the articles that can be got to, but have not be look at
     closedList = set() # the articles that have already be processed
-    count = 0
+    
     openList.add(start)
     while openList:
         start = sorted(openList, key=lambda inst: inst.distance)[0]
-        if start.title == end.title:
-            return True
-        if start.distance == 3: break
         openList.remove(start)
         closedList.add(start)
+        
         for article in start.links.split(':'):
             if article in dic: # if the article is an actual link
                 if dic[article] not in closedList:
                     dic[article].distance = start.distance + 1
                     openList.add(dic[article])
                     dic[article].parent = start.title
-            else:
-                pass
+                if dic[article].distance > start.distance + 1: # sets the parent to another path if it is shorter
+                    dic[article].distance = start.distance + 1
+                    dic[article].parent = start.title
+                if article == end.title:
+                    return True
     return False
           
 def pathMaker(dic, start, end):
@@ -83,12 +84,14 @@ def pathMaker(dic, start, end):
     path.reverse()
     return path
 
-start = 'Kathrinstadt Airport'
-end = 'United States Department of Defense'
+start = 'Rochester Institute of Technology'
+end = 'Human resource management'
 dic = makeDic('output.txt')
-print(dic[start].links)
 dic[start].distance = 0
+startTime = time.clock()
 print(aStar(dic, dic[start], dic[end]))
+endTime = time.clock()
+print('Time to find path: ' + str(datetime.timedelta(seconds=(endTime - startTime))))
 print('-----------------------------------------')
 print(pathMaker(dic, start, end))
 

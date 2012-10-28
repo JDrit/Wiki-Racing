@@ -21,5 +21,7 @@ Files:
 	- distance
 
 - server.py (TBD)
-	Will use bottle.py to host a small webserver to run the pathfinder through
-	a website.
+	Uses the bottle python web server framework to handle requests. The main path is
+	/path but everything gets redirected to /path as well. The server handles 404 and
+	500 errors. It uses a templates system to help display the path to the user. It imports
+	the methods from pathFinder.py.

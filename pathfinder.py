@@ -1,4 +1,3 @@
-import sqlite3
 import time
 import datetime
 import cPickle as pickle
@@ -48,6 +47,8 @@ def aStar(dic, start, end):
     '''
     openList = set()   # the articles that can be got to, but have not be look at
     closedList = set() # the articles that have already be processed
+    start = dic[start]
+    end = dic[end]
     
     openList.add(start)
     while openList:
@@ -84,14 +85,17 @@ def pathMaker(dic, start, end):
     path.reverse()
     return path
 
-start = 'Rochester Institute of Technology'
-end = 'Human resource management'
-dic = makeDic('output.txt')
-dic[start].distance = 0
-startTime = time.clock()
-print(aStar(dic, dic[start], dic[end]))
-endTime = time.clock()
-print('Time to find path: ' + str(datetime.timedelta(seconds=(endTime - startTime))))
-print('-----------------------------------------')
-print(pathMaker(dic, start, end))
+def main():
+    start = 'Anarchism'
+    end = 'Ordinary (officer)'
+    print('path finder start')
+    dic = makeDic('output.txt')
+    dic[start].distance = 0
+    startTime = time.clock()
+    print(aStar(dic, start, end))
+    endTime = time.clock()
+    print('Time to find path: ' + str(datetime.timedelta(seconds=(endTime - startTime))))
+    print('-----------------------------------------')
+    print(pathMaker(dic, start, end))
 
+#main()

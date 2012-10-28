@@ -3,7 +3,7 @@ import time
 import cPickle as pickle
 
 def readFile(fname):
-    output = open('output.txt', 'w')
+    output = open('output2.txt', 'w')
     f = open(fname) # the xml file to read from
     start = False
     pageTitle = ''  # article's title
@@ -39,7 +39,7 @@ def readFile(fname):
             entry = []
             if count % 1000000 == 0:                
                 print(format(count, ",d") + " done.")
-        line = f.readline()   
+        line = f.readline()
     f.close()
     output.close()
     print('element count: ' + format(count, ",d"))

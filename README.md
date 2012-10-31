@@ -20,8 +20,11 @@ Files:
 	- parent
 	- distance
 
-- server.py (TBD)
+- server.py
 	Uses the bottle python web server framework to handle requests. The main path is
 	/path but everything gets redirected to /path as well. The server handles 404 and
 	500 errors. It uses a templates system to help display the path to the user. It imports
 	the methods from pathFinder.py.
+
+- pathViewer.tpl
+	The template file used for the bottle server.

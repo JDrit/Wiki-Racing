@@ -44,11 +44,12 @@ def aStar(dic, start, end):
     '''
     openList = set()   # the articles that can be got to, but have not be look at
     closedList = set() # the articles that have already be processed
+    distances = {}     # holds the distances for each article from the start
+    parents = {}       # holds the parent article for the best path for the articles
+
     start = dic[start]
     end = dic[end]
-    distances = {}
     distances[start.title] = 0
-    parents = {}
     openList.add(start)
     
     while openList:
@@ -69,7 +70,6 @@ def aStar(dic, start, end):
                     distances[article] = distances[start.title] + 1
                     parents[article] = start.title
                 if article == end.title:
-                    print('size', len(closedList))
                     return parents
     return False
           
@@ -82,7 +82,7 @@ def pathMaker(parents, start, end):
     Returns a list of the articles to go to
     '''
     path = []
-    while not parents[end] == start:
+    while not end == start:
         path.append(end)
         end = parents[end]
     path.append(start)
@@ -90,9 +90,8 @@ def pathMaker(parents, start, end):
     return path
 
 def main():
-    start = 'Anarchism'
-    end = 'My Further Disillusionment in Russia'
-    print('path finder started')
+    start = 'Vladimir Putin'
+    end = 'Ubisoft'
     dic = makeDic('output.txt')
     dic[start].distance = 0
     startTime = time.clock()

@@ -10,15 +10,15 @@ Files:
 	cPickle.
 
 - pathFinder.py
-	Loads the data using cPickle into a dictionary of Node class. It then runs
-	the aStar algorithm over the dictionary to find the best path between the
-	two articles.
+	Holds the methods used by the server to load the articles into memory and find
+	the best path between any two articles. The data for each class is static, the
+	article name and the links it has to other articles. The pathfinder method has
+	instance list for distances and parents of each article so that mult. connections
+	do not interfer with each other.
 	
 	Node class:
 	- title
 	- links
-	- parent
-	- distance
 
 - server.py
 	Uses the bottle python web server framework to handle requests. The main path is

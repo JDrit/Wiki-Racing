@@ -3,7 +3,7 @@ import datetime
 import cPickle as pickle
 
 class Node:
-   
+
     def __init__(self, title, links):
         self.title = title        # the title of the article
         self.links = links        # the titles of all the articles linked to
@@ -53,7 +53,6 @@ def aStar(dic, start, end):
     openList.add(start)
     
     while openList:
-        #start = sorted(openList, key=lambda inst: inst.distance)[0]
         start = sorted(openList, key=lambda inst: distances[inst.title])[0]
         openList.remove(start)
         closedList.add(start)
@@ -62,10 +61,8 @@ def aStar(dic, start, end):
             if article in dic: # if the article is an actual link
                 if dic[article] not in closedList:
                     distances[article] = distances[start.title] + 1
-                    ###dic[article].distance = start.distance + 1
                     openList.add(dic[article])
                     parents[article] = start.title
-                    ###dic[article].parent = start.title
                 if distances[article] > distances[start.title] + 1:
                     distances[article] = distances[start.title] + 1
                     parents[article] = start.title

@@ -3,21 +3,21 @@ from pathfinder import pathMaker, makeDic, aStar
 
 dic = {}
 
-@get('/path')
+@get('/')
 def index():
     output = template('index', message = 'Enter in a start and end point.')
     return output
 
-@post('/path')
+@post('/')
 def pathfinder():
     global dic
     startLoc = request.forms.get('start')
     endLoc = request.forms.get('end')
     if startLoc in dic and endLoc in dic:
-        parents = aStar(dic, startLoc, endLoc, 60)
+        parents, time = aStar(dic, startLoc, endLoc, 60)
         if parents:
             path = pathMaker(parents, startLoc, endLoc)
-            output = template('pathViewer', path=path)
+            output = template('pathViewer', path=path, time=('.2f' % int))
         else:
             output = template('index', message = 'There is no path between the two given points.')
     else:
@@ -26,7 +26,7 @@ def pathfinder():
             
 @error(404)
 def error404(error):
-    redirect('/path')
+    redirect('/')
 
 @error(500)
 def error505(error):
@@ -38,7 +38,7 @@ def serverStart():
     print('Server Started')
     dic = makeDic('output.txt')
     print('Dictionary Loaded')
-    run(server='paste', host='localhost', port=8080)
+    run(host='localhost', port=8080)
 
 serverStart()  
 

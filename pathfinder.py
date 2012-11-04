@@ -51,7 +51,7 @@ def aStar(dic, start, end, stopTime):
     
     while openList:
         if time.clock() - startTime >= stopTime:
-            return False # returns False if it takes longer the time passed
+            return False, 0 # returns False if it takes longer the time passed
         
         start = sorted(openList, key=lambda inst: distances[inst])[0]
         openList.remove(start)
@@ -66,8 +66,8 @@ def aStar(dic, start, end, stopTime):
                     distances[article] = distances[start] + 1
                     parents[article] = start
                 if article == end:
-                    return parents
-    return False
+                    return parents, (time.clock() - startTime)
+    return False, 0
           
 def pathMaker(parents, start, end):
     '''
@@ -94,7 +94,7 @@ def main():
     end = 'Jurisdiction'
     dic = makeDic('output.txt')
     startTime = time.clock()
-    parents = aStar(dic, start, end, 60)
+    parents, time = aStar(dic, start, end, 60)
     endTime = time.clock()
     print('Time to find path: ' + str(datetime.timedelta(seconds=(endTime - startTime))))
     print('-----------------------------------------')

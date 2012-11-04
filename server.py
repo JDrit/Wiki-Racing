@@ -1,4 +1,4 @@
-from bottle import route, redirect, run, post, request, get, template, error
+from bottle import redirect, run, post, request, get, template, error
 from pathfinder import pathMaker, makeDic, aStar
 
 dic = {}
@@ -14,7 +14,7 @@ def pathfinder():
     startLoc = request.forms.get('start')
     endLoc = request.forms.get('end')
     if startLoc in dic and endLoc in dic:
-        if aStar(dic, startLoc, endLoc):
+        if aStar(dic, startLoc, endLoc, 60):
             path = pathMaker(dic, startLoc, endLoc)
             output = template('pathViewer', path=path)
         else:

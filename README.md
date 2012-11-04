@@ -22,9 +22,13 @@ Files:
 
 - server.py
 	Uses the bottle python web server framework to handle requests. The main path is
-	/path but everything gets redirected to /path as well. The server handles 404 and
+	'/path' but everything gets redirected to /path as well. The server handles 404 and
 	500 errors. It uses a templates system to help display the path to the user. It imports
 	the methods from pathFinder.py.
 
 - pathViewer.tpl
-	The template file used for the bottle server.
+	The template file used for the bottle server. It displays the result from the give input
+	in a list.
+
+- index.tpl
+	The template for the start page as long as the error message page.

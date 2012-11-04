@@ -38,7 +38,7 @@ def serverStart():
     print('Server Started')
     dic = makeDic('output.txt')
     print('Dictionary Loaded')
-    run(host='localhost', port=8080)
+    run(server='paste', host='localhost', port=8080)
 
 serverStart()  
 

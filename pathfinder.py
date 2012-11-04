@@ -53,7 +53,7 @@ def aStar(dic, start, end, stopTime):
         if time.clock() - startTime >= stopTime:
             return False # returns False if it takes longer the time passed
         
-        start = sorted(openList, key=lambda inst: distances[inst])[0])
+        start = sorted(openList, key=lambda inst: distances[inst])[0]
         openList.remove(start)
         closedList.add(start)
         for article in dic[start].split(':'):

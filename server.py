@@ -14,8 +14,9 @@ def pathfinder():
     startLoc = request.forms.get('start')
     endLoc = request.forms.get('end')
     if startLoc in dic and endLoc in dic:
-        if aStar(dic, startLoc, endLoc, 60):
-            path = pathMaker(dic, startLoc, endLoc)
+        parents = aStar(dic, startLoc, endLoc, 60)
+        if parents:
+            path = pathMaker(parents, startLoc, endLoc)
             output = template('pathViewer', path=path)
         else:
             output = template('index', message = 'There is no path between the two given points.')
@@ -34,7 +35,9 @@ def error505(error):
 
 def serverStart():
     global dic
+    print('Server Started')
     dic = makeDic('output.txt')
+    print('Dictionary Loaded')
     run(host='localhost', port=8080)
 
 serverStart()  

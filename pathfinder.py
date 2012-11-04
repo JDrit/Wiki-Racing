@@ -53,7 +53,7 @@ def aStar(dic, start, end, stopTime):
         if time.clock() - startTime >= stopTime:
             return False # returns False if it takes longer the time passed
         
-        start = sorted(openList, key=lambda inst: distances[inst])[0]
+        start = sorted(openList, key=lambda inst: distances[inst])[0])
         openList.remove(start)
         closedList.add(start)
         for article in dic[start].split(':'):
@@ -65,7 +65,6 @@ def aStar(dic, start, end, stopTime):
                 if distances[article] > distances[start] + 1: # overwrites path if a better one is found
                     distances[article] = distances[start] + 1
                     parents[article] = start
-                    print('test')
                 if article == end:
                     return parents
     return False
@@ -82,7 +81,6 @@ def pathMaker(parents, start, end):
     path = []
     while not end == start:
         path.append(end)
-        print(end)
         end = parents[end]
     path.append(start)
     path.reverse()
@@ -102,4 +100,4 @@ def main():
     print('-----------------------------------------')
     print(pathMaker(parents, start, end))
 
-main()
+#main()

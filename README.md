@@ -6,19 +6,16 @@ wikipedia articles.
 Files:
 - parser.py
 	Reads the .xml file from wikipedia and pulls out the article title and all
-	the links in it. It saves each (title, link) pair as a dictionary using
+	the links in it. It saves each (title, link) pair as a list using
 	cPickle.
 
 - pathFinder.py
 	Holds the methods used by the server to load the articles into memory and find
-	the best path between any two articles. The data for each class is static, the
-	article name and the links it has to other articles. The pathfinder method has
-	instance list for distances and parents of each article so that mult. connections
-	do not interfer with each other.
-	
-	Node class:
-	- title
-	- links
+	the best path between any two articles. The data for each class is stored in
+	a python dictionary with the key being the article name and the value being a
+	string of all the links that the article has. The pathfinder method has instance
+	list for distances and parents of each article so that mult. connections
+	do not interfer with each other.	
 
 - server.py
 	Uses the bottle python web server framework to handle requests. The main path is

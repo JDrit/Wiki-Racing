@@ -6,7 +6,7 @@ Wiki Racing Path Finder
 </title>
 <style media="screen" type="text/css">
 #main {
-	width: 700px ;
+	width: 900px ;
 	margin-left: auto ;
 	margin-right: auto ;
 }

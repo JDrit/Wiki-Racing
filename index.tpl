@@ -36,7 +36,7 @@ Wiki Racing Path Finder
 	<br />
 	<h1>{{message}}</h1>
 	<br />
-	<form method="POST" action="/path">
+	<form method="POST" action="/">
 		<input name="start" type="text" />
         <input name="end" type="text" />
 		<input type="submit" />
@@ -50,7 +50,7 @@ Wiki Racing Path Finder
 <br />
 <br />
 <br />
-<p style="text-align:left;">By: <i>Joseph Batchik</i></p>
+<p style="text-align:left;">By: <i>Joseph Batchik</i> - CSH</p>
 </div>
 </body>
 </html>

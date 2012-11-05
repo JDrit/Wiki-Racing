@@ -52,7 +52,7 @@ Wiki Racing Path Finder
 <br />
 <br />
 <br />
-<p style="text-align:left;">By: <i>Joseph Batchik</i></p>	
+<p style="text-align:left;">By: <i>Joseph Batchik</i> - CSH</p>	
 </div>
 </body>
 </html>

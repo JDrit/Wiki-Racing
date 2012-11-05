@@ -35,7 +35,8 @@ def aStar(dic, start, end, stopTime):
     dic (dictionary): the dictionary containing the articles' data
     start (String): the title of the start article
     end (String): the title of the end article
-    stopTime (int): the number of seconds to find a path before it breaks
+    stopTime (int): the number of seconds to find a path before it breaks, -1 if
+        should never break
     Returns:
         True if path found
         False if no path was found
@@ -50,7 +51,7 @@ def aStar(dic, start, end, stopTime):
     startTime = time.clock()
     
     while openList:
-        if time.clock() - startTime >= stopTime:
+        if time.clock() - startTime >= stopTime and not stopTime == -1:
             return False, 0 # returns False if it takes longer the time passed
         
         start = sorted(openList, key=lambda inst: distances[inst])[0]
@@ -91,10 +92,10 @@ def main():
     Test data / code
     '''
     start = 'Anarchism'
-    end = 'Jurisdiction'
+    end = 'Akron'
     dic = makeDic('output.txt')
     startTime = time.clock()
-    parents, time = aStar(dic, start, end, 60)
+    parents, time = aStar(dic, start, end, )
     endTime = time.clock()
     print('Time to find path: ' + str(datetime.timedelta(seconds=(endTime - startTime))))
     print('-----------------------------------------')

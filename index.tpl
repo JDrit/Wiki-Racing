@@ -4,8 +4,8 @@
 <title>
 Wiki Racing Path Finder
 </title>
-<link rel="stylesheet" type="text/css" href="style.css">
-<script type="text/javascript" src="spin.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/style.css">
+<script type="text/javascript" src="/static/spin.js"></script>
 <script type="text/javascript">
 	function startSpinner() {
 		if (document.getElementById("wait").innerHTML == "") {
@@ -34,7 +34,7 @@ Wiki Racing Path Finder
 	};
 </script>
 </head>
-<body>
+<body id="body">
 <br />
 <br />
 <h1 id="header">Wikipedia Racing Path Finder</h1>

@@ -4,9 +4,9 @@
 <title>
 Wiki Racing Path Finder
 </title>
-<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="/static/style.css">
 </head>
-<body>
+<body id="body">
 <br />
 <br />
 <h1 id="header">Wikipedia Racing Path Finder</h1>

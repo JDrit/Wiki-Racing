@@ -7,16 +7,20 @@ Dependicies:
 - python2 (v2.7.3):
 	The program usesw cPickle, an C implementation of Pickle, which is not supported in
 	python3.
+
 - Bottle (v0.12-dev):
 	It is a lightweight (single file), fast, WSGI web framework that runs completly in
 	python. Bottle has support for templates, routing, and multiple different types of 
 	servers. It defaultly uses wsgiref WSGIServer, a non-threading HTTP server, which can
 	cause the server to be slow. It handles all the request that the server gets and 
 	calls all the important	methods when needed.
+
 - Paste (v1.7.5.1):
 	This is not required but it fixes the problem of the server not being able to handle
 	multiple request at the same time. This is the suggested server to run instead of the
-	default but, others could be cherrypy, rocket, waitress, etc. 
+	default but, others could be cherrypy, rocket, waitress, etc.
+
+- Spin.js
 
 Files:
 - parser.py:

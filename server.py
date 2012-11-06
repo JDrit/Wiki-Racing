@@ -8,13 +8,7 @@ dic = {}
 @get('/')
 def index():
     logging.info(' GET ' + request.environ.get('REMOTE_ADDR') + ' ' + request.path + ' [' + strftime("%a, %d %b %Y %H:%M:%S", localtime()) + ']')
-    print(request.environ.get('REMOTE_ADDR'))
-    print(request.path)
-    print(request.method)
-    print(request.headers)
-    
-    output = template('index', message = 'Enter in a start and end point.')
-    return output
+    return template('index', message = 'Enter in a start and end point.')
 
 @post('/')
 def pathfinder():
@@ -37,14 +31,12 @@ def pathfinder():
 @error(404)
 def error404(error):
     logging.error(' 404 ' + request.environ.get('REMOTE_ADDR') + ' ' + request.path + ' [' + strftime("%a, %d %b %Y %H:%M:%S", localtime()) + ']')
-    output = template('index', message = 'Enter in a start and end point.')
-    return output 
+    return template('index', message = 'Enter in a start and end point.') 
 
 @error(500)
 def error505(error):
     logging.error(' 500 ' + request.environ.get('REMOTE_ADDR') + ' ' + request.path + ' [' + strftime("%a, %d %b %Y %H:%M:%S", localtime()) + ']')
-    output = template('index', message = 'The server is having some trouble processing your request right now')
-    return output
+    return template('index', message = 'The server is having some trouble processing your request right now')
 
 def serverStart():
     global dic

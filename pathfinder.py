@@ -73,7 +73,7 @@ def aStar(dic, start, end, stopTime):
 def pathMaker(parents, start, end):
     '''
     Makes the list of articles to go to to get from the start to the finish
-    dic (dictionary): the dictionary of the articles
+    parents (dictionary): the dictionary of the articles and their parents
     start (String): the start article's name
     end (String): the end article's name
     Returns:
@@ -86,6 +86,24 @@ def pathMaker(parents, start, end):
     path.append(start)
     path.reverse()
     return path
+
+def pathMakerString(parents, start, end):
+    '''
+    Makes a string that represents the articles to go through to get from the
+        start to the end article
+    parents (dictionary): the dictionary of the articles and their parents
+    start (String): the start article's name
+    end (String): the end article's name
+    Returns:
+        a string of the path to take
+    '''
+    path = pathMaker(parents, start, end)
+    s = ''
+    for element in path:
+        s += element + ":"
+    return s[:-1]
+    
+    
 
 def main():
     '''

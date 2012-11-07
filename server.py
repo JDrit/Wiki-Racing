@@ -4,8 +4,7 @@ from time import localtime, strftime
 import logging, sqlite3
 
 dic = {}
-conn = sqlite3.connect('paths.db')
-cur = conn.cursor()
+
 
 @route('/static/:path#.+#', name='static')
 def static(path): # deals with the static .css and .js files
@@ -20,7 +19,8 @@ def index():
 @post('/')
 def pathfinder():
     global dic
-    global cur
+    conn = sqlite3.connect('paths.db')
+	cur = conn.cursor()
     
     startLoc = request.forms.get('start')
     endLoc = request.forms.get('end')
@@ -36,6 +36,7 @@ def pathfinder():
             if parents: # if a path was found
                 pathString = pathMakerString(parents, startLoc, endLoc)
                 cur.execute("Insert INTO paths VALUES ('%s', '%s', '%s')" % (startLoc, endLoc, pathString))
+				conn.commit()
                 output = template('pathViewer', path=pathString.split(':'), time=str('%.2f' % time))
             else: # no path found
                 output = template('index', message = 'There is no path between the two given points.')

@@ -5,6 +5,7 @@
 Wiki Racing Path Finder
 </title>
 <link rel="stylesheet" type="text/css" href="/static/style.css">
+<link rel="shortcut icon" href="/static/favicon.ico">
 </head>
 <body id="body">
 <br />

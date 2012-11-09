@@ -1,3 +1,8 @@
+'''
+author: JDrit
+description: The library that does all the processing for the server. This loads
+    the data, finds the path, and finds the string of the path.
+'''
 import time
 import datetime
 import cPickle as pickle

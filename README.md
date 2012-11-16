@@ -1,7 +1,11 @@
 Wiki-Racing
 ===========
-This project's goal is to be able to find the best path between any two 
-wikipedia articles.
+This project's goal is to be able to find the best path between any two wikipedia articles.
+It runs a frontend and backend side that tries to find the path between any two articles.
+If the front end can not find the path in the given time period (60 seconds), then it is
+moved to the backend and given 10 minutes to find the path. Once the path is found, it is
+added to the database of found paths. When there are no failed atempts in the backend, it
+picks commonly used start and end points and tries to find a path between them.
 
 Dependicies:
 - python2 (v2.7.3):
@@ -41,6 +45,13 @@ Files:
 	'/path' but everything gets redirected to /path as well. The server handles 404 and
 	500 errors. It uses a templates system to help display the path to the user. It imports
 	the methods from pathFinder.py.
+
+- backend.py:
+	The code that runs in the backend of the site. When an attempt to find a path fails, it
+	is given to the backend and given 10 minutes to find the path. The backend uses threading
+	to allow for multiple paths to be searched for at the same time. When there are no failed
+	attempts to search for, it generates some by looking at commonly used start and end
+	locations.
 
 - pathViewer.tpl:
 	The template file used for the bottle server. It displays the result from the give input

@@ -40,11 +40,11 @@ class WorkerThread(threading.Thread):
                 while True:
                         job = self.queue.get(True) # blocks till their is a job in the queue
                         if not job == None:
-                                print('job', job)
+                                print('started job', job, 'jobs left', queue.qsize())
                                 start = str(job).split(':')[0]
                                 end = str(job).split(':')[1]
-                                currentArticles.append(start + ':' + end)
-                                parents = aStar(dic, start, end, 6000)[0] # the holding point
+                                currentArticles.append(start + ':' + end) # tells the server what is currently being worked on
+                                parents = aStar(dic, start, end, 600)[0] # the holding point
                                 if parents:
                                         pathString = pathMakerString(parents, start, end)
                                         print('completed job', job)
@@ -71,20 +71,20 @@ class MainThread(threading.Thread):
                 Starts the worker threads and adds new searches to the queue when
                         the queue is empty.
                 '''
+
+                getAllFails()
+                
                 for i in range(self.threadCount):
                         t = WorkerThread(queue)
                         t.setDaemon(True)
-                        t.start()
-
-                getAllFails()
+                        t.start()                
 
                 while True:
                         if queue.empty() and not dic == {}:
                                 newSearch = addNewSearch()
                                 if not newSearch == None:
                                         print('added new seach', newSearch)
-                                        queue.put(newSearch)                   
-
+                                        queue.put(newSearch)
                 queue.join()
   
 
@@ -100,6 +100,7 @@ def getAllFails():
         for element in failsCur:
                 queue.put(str(element[0]) + ':' + str(element[1]))
                 currentArticles.append(str(element[0]) + ':' + str(element[1]))
+        print('Read in ' + str(len(failsCur)) + ' failed attempts from the database')
         
 
 def addElement(start, end):
@@ -115,8 +116,9 @@ def addElement(start, end):
         if cur.execute("SELECT * FROM fails WHERE start='%s' AND end='%s'" % (start, end)).fetchall() == []:
                 cur.execute("INSERT INTO fails VALUES ('%s', '%s')" % (start, end))
                 conn.commit()
-                print('addElement', start + ':' + end)
                 queue.put(start + ':' + end)
+                print('addElement', start + ':' + end + ' :: Search List Length: ' + str(queue.qsize()))
+                
 
 def addNewSearch():
         '''
@@ -157,7 +159,7 @@ def addNewSearch():
                 else:
                         return
 
-                if not cur.execute("SELECT path FROM paths WHERE start='%s' AND end='%s'" % (start, end)).fetchall() == []:
+                if cur.execute("SELECT path FROM paths WHERE start='%s' AND end='%s'" % (start, end)).fetchall() == []:
                         if not start + ':' + end in currentArticles:
                                 break
         currentArticles.append(start + ':' + end)

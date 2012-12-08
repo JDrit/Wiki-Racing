@@ -7,7 +7,7 @@ description: This runs in the background, finding paths that could not be found
         failed paths, then the program picks a common start and end article and
         finds the path between them.
 '''
-from pathfinder import pathMakerString, aStar
+from pathfinder import pathMakerString, BFS
 import sqlite3
 import Queue
 import threading
@@ -44,7 +44,7 @@ class WorkerThread(threading.Thread):
                                 start = str(job).split(':')[0]
                                 end = str(job).split(':')[1]
                                 currentArticles.append(start + ':' + end) # tells the server what is currently being worked on
-                                parents = aStar(dic, start, end, 600)[0] # the holding point
+                                parents = BFS(dic, start, end, 600)[0] # the holding point
                                 if parents:
                                         pathString = pathMakerString(parents, start, end)
                                         print('completed job', job)

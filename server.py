@@ -5,7 +5,7 @@ description: Runs the server to host the wiki racing program. It interfaces with
     from the pathfinder.py to run all the actual processing.
 '''
 from bottle import Bottle, redirect, route, run, post, request, get, template, error, static_file
-from pathfinder import pathMaker, makeDic, aStar, pathMakerString
+from pathfinder import pathMaker, makeDic, BFS, pathMakerString
 from time import localtime, strftime
 from backend import startBackend, addElement
 import logging, sqlite3
@@ -37,7 +37,7 @@ def pathfinder():
         if sqlElement: # if the start and end loc have already been found
             output = template('pathViewer', path=sqlElement.split(":"), time='0.00')
         else: # if new start and end location
-            parents, time = aStar(dic, startLoc, endLoc, 60)
+            parents, time = BFS(dic, startLoc, endLoc, 60)
 
             if parents: # if a path was found
                 pathString = pathMakerString(parents, startLoc, endLoc)
@@ -69,6 +69,7 @@ def serverStart():
     logging.info(' Server started at ' + strftime("%a, %d %b %Y %H:%M:%S ", localtime()))
     print('Server started')
     dic = makeDic('output.txt')
+    print(len(dic))
     startBackend(dic, 4)
     print('backend started')
     run(host='localhost', port=8080)

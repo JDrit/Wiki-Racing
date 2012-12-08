@@ -9,7 +9,7 @@ picks commonly used start and end points and tries to find a path between them.
 
 Dependicies:
 - python2 (v2.7.3):
-	The program usesw cPickle, an C implementation of Pickle, which is not supported in
+	The program uses cPickle, an C implementation of Pickle, which is not supported in
 	python3.
 
 - Bottle (v0.12-dev):

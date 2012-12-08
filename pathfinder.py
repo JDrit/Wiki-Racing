@@ -3,9 +3,11 @@ author: JDrit
 description: The library that does all the processing for the server. This loads
     the data, finds the path, and finds the string of the path.
 '''
-import time
+from time import clock
 import datetime
 import cPickle as pickle
+from collections import deque
+
 
 def makeDic(fname):
     '''
@@ -19,7 +21,7 @@ def makeDic(fname):
     wikiInput = open(fname)
     dic = {}
     count = 0
-    startTime = time.clock()
+    startTime = clock()
     while True:
         try:
             element = pickle.load(wikiInput) # single article, [0] is title, [1] is links
@@ -29,51 +31,41 @@ def makeDic(fname):
                 print('loaded ' + format(count, ',d') + ' elements')
         except EOFError:
             break # breaks when all articles have been read
-    endTime = time.clock()
+    endTime = clock()
     print('Time to load dictionary: ' + str(datetime.timedelta(seconds=(endTime - startTime))))
+    print('Loaded ' + str(len(dic)) + ' elements')
     wikiInput.close()
     return dic
 
-def aStar(dic, start, end, stopTime):
+def BFS(dic, start, end, stopTime):
     '''
-    Runs the A Star Algorithm on the passed dictionary
-    dic (dictionary): the dictionary containing the articles' data
-    start (String): the title of the start article
-    end (String): the title of the end article
-    stopTime (int): the number of seconds to find a path before it breaks, -1 if
-        should never break
+    Preforms a Breth First Search on the Wikipedia articles to find the shortest
+        path between the start and end
+    dic (dict): the dictionary of the Wikipedia articles' titles and links
+    start (str): the start article's title
+    end (str): the end article's title
+    stopTime (int): the number of seconds to timeout if a path can not be found
     Returns:
-        True if path found
-        False if no path was found
+        parents (dict): the parent of all articles in the searched area
+        time (int): the number of seconds it took to find the path
     '''
-    openList = set()   # the articles that can be got to, but have not be look at
-    closedList = set() # the articles that have already be processed
-    distances = {}     # holds the distances for each article from the start
-    parents = {}       # holds the parent article for the best path for the articles
+    parents = {}
+    queue = deque()
+    queue.append(start)
+    startTime = clock()
 
-    distances[start] = 0
-    openList.add(start)
-    startTime = time.clock()
-    
-    while openList:
-        if time.clock() - startTime >= stopTime and not stopTime == -1:
-            return False, 0 # returns False if it takes longer the time passed
-        
-        start = sorted(openList, key=lambda inst: distances[inst])[0]
-        openList.remove(start)
-        closedList.add(start)
-        for article in dic[start].split(':'):
-            if article in dic: # if the article is an actual link, not a red wiki link
-                if article not in closedList:
-                    distances[article] = distances[start] + 1
-                    openList.add(article)
-                    parents[article] = start
-                if distances[article] > distances[start] + 1: # overwrites path if a better one is found
-                    distances[article] = distances[start] + 1
-                    parents[article] = start
-                if article == end:
-                    return parents, (time.clock() - startTime)
+    while not len(queue) == 0:
+        if clock() - startTime >= stopTime and not stopTime -1:
+            return False, 0
+        current = queue.popleft()
+        if current == end:
+            return parents, (clock() - startTime)
+        for neighbor in dic[current].split(':'):
+            if neighbor not in parents and neighbor in dic:
+                parents[neighbor] = current
+                queue.append(neighbor)
     return False, 0
+    
           
 def pathMaker(parents, start, end):
     '''
@@ -108,18 +100,18 @@ def pathMakerString(parents, start, end):
         s += element + ":"
     return s[:-1]
     
-    
 
 def main():
     '''
     Test data / code
     '''
-    start = 'Anarchism'
+    start = 'USA'
     end = 'Akron'
     dic = makeDic('output.txt')
-    startTime = time.clock()
-    parents, time = aStar(dic, start, end, )
-    endTime = time.clock()
+    startTime = clock()
+    print(len(dic))
+    parents, time = BFS(dic, start, end, -1)
+    endTime = clock()
     print('Time to find path: ' + str(datetime.timedelta(seconds=(endTime - startTime))))
     print('-----------------------------------------')
     print(pathMaker(parents, start, end))

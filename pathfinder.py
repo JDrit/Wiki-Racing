@@ -24,18 +24,20 @@ def makeDic(fname):
     startTime = clock()
     while True:
         try:
-            element = pickle.load(wikiInput) # single article, [0] is title, [1] is links
+            element = pickle.load(wikiInput)  # single article, [0] is title, [1] is links
             dic[element[0]] = element[1]
             count += 1
             if count % 1000000 == 0:
                 print('loaded ' + format(count, ',d') + ' elements')
         except EOFError:
-            break # breaks when all articles have been read
+            break  # breaks when all articles have been read
     endTime = clock()
-    print('Time to load dictionary: ' + str(datetime.timedelta(seconds=(endTime - startTime))))
+    print('Time to load dictionary: ' + str(datetime.timedelta(
+                                            seconds=(endTime - startTime))))
     print('Loaded ' + str(len(dic)) + ' elements')
     wikiInput.close()
     return dic
+
 
 def BFS(dic, start, end, stopTime):
     '''
@@ -55,7 +57,7 @@ def BFS(dic, start, end, stopTime):
     startTime = clock()
 
     while not len(queue) == 0:
-        if clock() - startTime >= stopTime and not stopTime -1:
+        if clock() - startTime >= stopTime and not stopTime - 1:
             return False, 0
         current = queue.popleft()
         if current == end:
@@ -65,8 +67,8 @@ def BFS(dic, start, end, stopTime):
                 parents[neighbor] = current
                 queue.append(neighbor)
     return False, 0
-    
-          
+
+
 def pathMaker(parents, start, end):
     '''
     Makes the list of articles to go to to get from the start to the finish
@@ -84,6 +86,7 @@ def pathMaker(parents, start, end):
     path.reverse()
     return path
 
+
 def pathMakerString(parents, start, end):
     '''
     Makes a string that represents the articles to go through to get from the
@@ -99,7 +102,7 @@ def pathMakerString(parents, start, end):
     for element in path:
         s += element + ":"
     return s[:-1]
-    
+
 
 def main():
     '''
@@ -110,7 +113,7 @@ def main():
     dic = makeDic('output.txt')
     startTime = clock()
     print(len(dic))
-    parents, time = BFS(dic, start, end, -1)
+    parents, _ = BFS(dic, start, end, -1)
     endTime = clock()
     print('Time to find path: ' + str(datetime.timedelta(seconds=(endTime - startTime))))
     print('-----------------------------------------')
